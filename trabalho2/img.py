@@ -1,5 +1,7 @@
 import cv2
 from math import sqrt, atan2
+import numpy as np
+from scipy import ndimage # to install <sudo apt-get install python3-scipy>
 
 from pixel import Pixel
 
@@ -19,7 +21,6 @@ class Image():
         if parametro == 1:  # view base image
             cv2.namedWindow('Base Image', cv2.WINDOW_NORMAL)
             cv2.resizeWindow('Base Image', 800, 600)
-            cv2.
             cv2.imshow('Base Image', self.img)
         elif parametro == 2:
             cv2.namedWindow('Limiar Image', cv2.WINDOW_NORMAL)
@@ -29,8 +30,6 @@ class Image():
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    
-    
     def prewitt(self):
         x = [[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]]
         y = [[-1, -1, -1], [0, 0, 0], [1, 1, 1]]
@@ -65,7 +64,19 @@ class Image():
         x,y = self.filter(filter)
         return atan2(y[i][j]/(x[i][j])+1*10**-8)
 
-
+    def sobel_filters(self, x, y, image):
+        Kx = np.array(x, np.float32)
+        Ky = np.array(y, np.float32)
+    
+        Ix = ndimage.filters.convolve(image, Kx)
+        Iy = ndimage.filters.convolve(image, Ky)
+    
+        G = np.hypot(Ix, Iy)
+        G = G / G.max() * 255
+        theta = np.arctan2(Iy, Ix)
+        return (G, theta)
 
     def neighbor(self):
+        pass
+        
 
