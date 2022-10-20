@@ -1,14 +1,23 @@
 from img import Image
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import cv2
+import numpy as np
 
 if __name__=="__main__":
-    img = Image('./imgs/img02.jpg') # set img path
-    blur = img.my_gaussian_blur(img.img,3,1)
-    x,y = img.sobel()
-    G, theta = img.sobel_filters(x,y,blur)
-    #G, theta = sobel_filters(gray_img)
-    G = G.astype(int)
-    theta = theta.astype(int)
-    print(G)
-    cv2.imshow('gray',G) # ta ai braia?? sabe o pq a img nao fica na tela  ??
+    img = Image('./imgs/chessboard_inv.png')
+    img.view_img(1)
+    img.view_img(2)
+    img.view_img(3)
+
+    img_1 = Image('./imgs/Lua1_gray.jpg')
+    img_1.view_img(1)
+    img_1.view_img(2)
+    img_1.view_img(3)
+
+    img_2 = Image('./imgs/img02.jpg')
+    img_2.view_img(1)
+    img_2.view_img(2)
+    img_2.view_img(3)
+
+    
+    
