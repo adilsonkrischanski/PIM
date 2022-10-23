@@ -1,5 +1,5 @@
-from this import d
 import cv2
+from this import d
 from math import sqrt, atan2
 import numpy as np
 from scipy import ndimage  # to install <sudo apt-get install python3-scipy>
@@ -7,7 +7,7 @@ from skimage.exposure import rescale_intensity
 import matplotlib.pyplot as plt
 
 
-class Imagem math import sqrt, atan2():
+class Image():
     def __init__(self, pathimage):
         self.img = self.img = cv2.imread(pathimage)
         self.neighbor_tam = 8
@@ -23,9 +23,13 @@ class Imagem math import sqrt, atan2():
     sobel_x = np.array(([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]]), dtype="int")
     sobel_y = np.array(([[-1, -2, -1], [0, 0, 0], [1, 2, 1]]), dtype="int")
 
+    hoop = np.array(([[-1, -1, -1], [-1, 8, -1 ], [-1, -1, -1]]), dtype="int" )
+
+
+
     def view_img(self, parametro):
         if parametro == 1:  # view base image
-                gray = cv2.cvtCview_imgolor(self.img, cv2.COLOR_BGR2GRAY)
+                gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
                 out_x = self.convolve(gray, self.sobel_x)
                 out_y = self.convolve(gray, self.sobel_y)
                 grad_mag = np.sqrt(np.square(out_x) + np.square(out_y))
@@ -62,6 +66,19 @@ class Imagem math import sqrt, atan2():
                 cv2.imshow("scharr_x", out_x)
                 cv2.imshow("scharr_y", out_y)
                 plt.imshow(grad_mag, cmap='gray')
+                plt.title("Gradient Magnitude")
+                plt.show()
+                cv2.waitKey(0)
+                cv2.destroyAllWindows() 
+        elif parametro == 4:
+                gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+                out_x = self.convolve(gray, self.hoop)
+                out_y = self.convolve(gray, self.scharr_y)
+                grad_mag = np.sqrt(np.square(out_x))
+                grad_mag *= 255.0 / grad_mag.max()
+                # cv2.imshow("original", self.img)
+                cv2.imshow("hoop", out_x)
+                # plt.imshow(grad_mag, cmap='gray')
                 plt.title("Gradient Magnitude")
                 plt.show()
                 cv2.waitKey(0)
