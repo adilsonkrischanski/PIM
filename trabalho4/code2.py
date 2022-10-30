@@ -68,10 +68,13 @@ class image():
         ax[0].set_title('Original Image', fontsize = f_size)
         ax[0].set_axis_off()
         
-# fourier_masker(dark_image, 1)
 
 
 if __name__== "__main__":
 
-    img = image('folhas1_Reticulada.jpg')
+    img = image('mandril.jpg')
     img.fourier_transform_rgb()
+    img.fourier_masker_ver(5)
+    img.fourier_masker_hor(5)
+    img.fourier_iterator([1,2,3,4,5])
+    plt.show()
