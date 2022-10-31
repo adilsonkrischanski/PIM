@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image
 import matplotlib.pyplot as plt
 from skimage.io import imread, imshow
 from skimage.color import rgb2hsv, rgb2gray, rgb2yuv
@@ -7,20 +8,22 @@ from skimage.exposure import equalize_hist
 
 class image():
     def __init__(self,path):
-        self.img = imread(path)
+        # self.img = imread(path)
+        self.img = Image.open(path)
 
     
 
     def fourier_masker_ver(self, i):
         image = self.img
         f_size = 15
-        dark_image_grey_fourier = np.fft.fftshift(np.fft.fft2(rgb2gray(image)))
+        img = image.convert("L")
+        dark_image_grey_fourier = np.fft.fftshift(np.fft.fft2(img))
         dark_image_grey_fourier[:225, 235:240] = i
         dark_image_grey_fourier[-225:,235:240] = i
         fig, ax = plt.subplots(1,3,figsize=(15,15))
         ax[0].imshow(np.log(abs(dark_image_grey_fourier)), cmap='gray')
         ax[0].set_title('Masked Fourier', fontsize = f_size)
-        ax[1].imshow(rgb2gray(image), cmap = 'gray')
+        ax[1].imshow(img, cmap = 'gray')
         ax[1].set_title('Greyscale Image', fontsize = f_size);
         ax[2].imshow(abs(np.fft.ifft2(dark_image_grey_fourier)), 
                         cmap='gray')
@@ -31,13 +34,14 @@ class image():
     def fourier_masker_hor(self, i):
         image = self.img
         f_size = 15
-        dark_image_grey_fourier = np.fft.fftshift(np.fft.fft2(rgb2gray(image)))
+        img = image.convert("L")
+        dark_image_grey_fourier = np.fft.fftshift(np.fft.fft2(img))
         dark_image_grey_fourier[235:240, :230] = i
         dark_image_grey_fourier[235:240,-230:] = i
         fig, ax = plt.subplots(1,3,figsize=(15,15))
         ax[0].imshow(np.log(abs(dark_image_grey_fourier)), cmap='gray')
         ax[0].set_title('Masked Fourier', fontsize = f_size)
-        ax[1].imshow(rgb2gray(image), cmap = 'gray')
+        ax[1].imshow(img, cmap = 'gray')
         ax[1].set_title('Greyscale Image', fontsize = f_size);
         ax[2].imshow(abs(np.fft.ifft2(dark_image_grey_fourier)), 
                         cmap='gray')
@@ -72,9 +76,9 @@ class image():
 
 if __name__== "__main__":
 
-    img = image('mandril.jpg')
-    img.fourier_transform_rgb()
-    img.fourier_masker_ver(5)
-    img.fourier_masker_hor(5)
-    img.fourier_iterator([1,2,3,4,5])
+    img = image('folhas1_Reticulada.jpg')
+    # img.fourier_transform_rgb()
+    # img.fourier_masker_ver(5)
+    img.fourier_masker_hor(100)
+    # img.fourier_iterator([1,2,3,4,5])
     plt.show()
