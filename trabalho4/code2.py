@@ -1,15 +1,13 @@
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 import matplotlib.pyplot as plt
-from skimage.io import imread, imshow
-from skimage.color import rgb2hsv, rgb2gray, rgb2yuv
-from skimage import color, exposure, transform
-from skimage.exposure import equalize_hist
+
 
 class image():
     def __init__(self,path):
         # self.img = imread(path)
         self.img = Image.open(path)
+        # self.img = imread(path)
 
     
 
@@ -51,16 +49,17 @@ class image():
     def fourier_iterator(self, value_list):
         image = self.img
         for i in value_list:
-            self.fourier_masker_ver(i)
+            self.fourier_masker_hor(i)
 
-    def fourier_transform_rgb(self):
+    def fourier_transform_rgb(self, i):
         image = self.img
         f_size = 25
         transformed_channels = []
+        image.convert()
         for i in range(3):
-            rgb_fft = np.fft.fftshift(np.fft.fft2((image[:, :, i])))
-            rgb_fft[:225, 235:237] = 1
-            rgb_fft[-225:,235:237] = 1
+            rgb_fft = np.fft.fftshift(np.fft.fft2((image)))
+            rgb_fft[:225, 235:237] = i
+            rgb_fft[-225:,235:237] = i
             transformed_channels.append(abs(np.fft.ifft2(rgb_fft)))
         
         final_image = np.dstack([transformed_channels[0].astype(int), 
@@ -71,14 +70,16 @@ class image():
         ax[0].imshow(image)
         ax[0].set_title('Original Image', fontsize = f_size)
         ax[0].set_axis_off()
+        plt.imshow(final_image)
         
 
 
 if __name__== "__main__":
 
     img = image('folhas1_Reticulada.jpg')
-    # img.fourier_transform_rgb()
-    # img.fourier_masker_ver(5)
-    img.fourier_masker_hor(100)
+    img.img = img.img.filter(ImageFilter.GaussianBlur)
+    img.fourier_transform_rgb(1)
+    img.fourier_masker_ver(1)
+    a = img.fourier_masker_hor(1)
     # img.fourier_iterator([1,2,3,4,5])
     plt.show()
