@@ -1,7 +1,6 @@
 import numpy as np
 from PIL import Image, ImageFilter
 import matplotlib.pyplot as plt
-from skimage.metrics import structural_similarity as ssim
 
 
 
